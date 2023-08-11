@@ -3,7 +3,7 @@ import db from './model/db.js';
 import dotenv from 'dotenv';
 import { createUser } from './controller/userController.js';
 import { getUserByEmail } from './controller/userController.js';
-import { newLocation } from './controller/locationController.js';
+import { newLocation, getLocationsByDateTime, getLocationsByDevice } from './controller/locationController.js';
 
 dotenv.config();
 const MONGO_URI = process.env.MONGO_URI;
@@ -17,6 +17,8 @@ app.use(express.json());
 app.post('/user',createUser);
 app.post('/location',newLocation);	
 app.get('/user/:email',getUserByEmail);
+app.get('/locations', getLocationsByDateTime);
+app.get('/locations/device', getLocationsByDevice);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
