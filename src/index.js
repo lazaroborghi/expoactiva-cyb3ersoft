@@ -1,7 +1,7 @@
 import express from 'express';
 import db from './model/db.js'; 
 import dotenv from 'dotenv';
-import { createUser } from './controller/userController.js';
+import { createUser, loginUser } from './controller/userController.js';
 import { getUserByEmail } from './controller/userController.js';
 import { newLocation, getLocationsByDateTime, getLocationsByDevice } from './controller/locationController.js';
 import { createDevice } from './controller/deviceController.js';
@@ -16,9 +16,11 @@ db(MONGO_URI);
 const app = express();
 app.use(express.json());
 
+app.post('/login', loginUser);
+app.post('/user',createUser);
+
 app.use(authenticateJWT); // Defino middleware para que se pida token
 
-app.post('/user',createUser);
 app.post('/location',newLocation);
 app.post('/createDevice',createDevice);
 app.get('/user/:email',getUserByEmail);

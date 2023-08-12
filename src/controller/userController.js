@@ -1,21 +1,57 @@
+import User from '../model/user.js';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
-import User from '../model/user.js'
+dotenv.config();
+const secretKey = process.env.KEY;
 
 export const createUser = async (req, res) => {
-    const user = new User(req.body)
+    const { fullname, email, password } = req.body;
+    
     try {
-        await user.save()
-        res.status(201).json(user)
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = new User({
+            fullname: fullname,
+            email: email,
+            password: hashedPassword
+        });
+        
+        await user.save();
+        res.status(201).send('User registered');
     } catch (error) {
-        res.status(400).json({ message: error.message })
+        res.status(400).json({ message: error.message });
     }
-}
+};
+
+export const loginUser = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+        if (!user) return res.status(400).send('Email not found');
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) return res.status(400).send('Invalid password');
+
+        const payload = { userId: user._id, email: user.email };
+        const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
+
+        res.json({ token });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
 
 export const getUserByEmail = async (req, res) => {
+    const email = req.params.email;
+
     try {
-        const user = await User.findOne({ email: req.params.email })
-        res.status(200).json(user)
+        const user = await User.findOne({ email });
+        if (!user) return res.status(400).send('User not found');
+
+        res.json(user);
     } catch (error) {
-        res.status(404).json({ message: error.message })
+        res.status(400).json({ message: error.message });
     }
-}
+};
