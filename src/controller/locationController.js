@@ -16,7 +16,7 @@ export const newLocation = async (req, res) => {
         latitude,
         date,
         time,
-        device: deviceId
+        deviceId
     });
 
     try {
@@ -31,13 +31,25 @@ export const newLocation = async (req, res) => {
 export const getLocationsByDateTime = async (req, res) => {
     const { date, time } = req.query;
 
+    let query = {};
+    if (date) {
+        query.date = date;
+    }
+    if (time) {
+        query.time = time;
+    }
+
     try {
-        const locations = await Location.find({ date, time });
+        const locations = await Location.find(query);
+        if (locations.length === 0) {
+            return res.status(404).json({ message: 'No locations found for the given date and/or time' });
+        }
         res.status(200).json(locations);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 }
+
 
 // Obtener ubicaciones por dispositivo
 export const getLocationsByDevice = async (req, res) => {
