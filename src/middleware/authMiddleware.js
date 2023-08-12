@@ -5,14 +5,25 @@ dotenv.config();
 const secretKey = process.env.KEY;
 
 const authenticateJWT = (req, res, next) => {
-    const token = req.headers.authorization;
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(' ')[1];
 
-    if (!token) return res.sendStatus(401);
+    if (!token) {
+        console.log("No token provided");
+        return res.sendStatus(401);
+    }
+
+    console.log("Token received:", token);
 
     jwt.verify(token, secretKey, (err, data) => {
-        if (err) return res.sendStatus(403);
+        if (err) {
+            console.log("Error during token verification:", err.message);
+            return res.sendStatus(403);
+        }
 
-        if (data.authorized) {
+        console.log("Token verified:", data);
+
+        if (data) {
             next();
         } else {
             res.sendStatus(403);
