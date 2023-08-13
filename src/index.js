@@ -6,6 +6,7 @@ import { getUserByEmail } from './controller/userController.js';
 import { newLocation, getLocationsByDateTime, getLocationsByDevice } from './controller/locationController.js';
 import { createDevice } from './controller/deviceController.js';
 import authenticateJWT from './middleware/authMiddleware.js';
+import { createEvent, getAllEvents, getEventById } from './controller/eventController.js';
 
 dotenv.config();
 const MONGO_URI = process.env.MONGO_URI;
@@ -21,6 +22,9 @@ app.post('/user',createUser);
 
 app.use(authenticateJWT); // Defino middleware para que se pida token
 
+app.get('/events',getAllEvents)
+app.post('/event', createEvent);
+app.get('/event/:id', getEventById);
 app.post('/location',newLocation);
 app.post('/createDevice',createDevice);
 app.get('/user/:email',getUserByEmail);
