@@ -1,4 +1,4 @@
-runtime: nodejs18
+runtime: nodejs
 env: flex
 instance_class: F1
 handlers:
@@ -10,3 +10,7 @@ automatic_scaling:
   min_pending_latency: automatic
   max_pending_latency: automatic
 service_account: expoactiva-nacional-395522@appspot.gserviceaccount.com
+env_variables:
+  MONGO_URI: mongodb+srv://lazaroborghi:Lazaro$23@fstodo.xcdkqom.mongodb.net/?retryWrites=true&w=majority
+  PORT: 3000
+  KEY: KTKNCYB3RSOFT51117587.-
