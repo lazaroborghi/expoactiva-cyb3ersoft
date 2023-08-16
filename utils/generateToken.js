@@ -1,7 +1,10 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
-dotenv.config();
+if (process.env.NODE_ENV !== 'production') {
+    dotenv.config();
+}
+
 const secretKey = process.env.KEY;
 
 const payload = { authorized: true };

@@ -8,7 +8,10 @@ import { createDevice } from './controller/deviceController.js';
 import authenticateJWT from './middleware/authMiddleware.js';
 import { createEvent, getAllEvents, getEventById } from './controller/eventController.js';
 
-dotenv.config();
+if (process.env.NODE_ENV !== 'production') {
+    dotenv.config();
+}
+
 const MONGO_URI = process.env.MONGO_URI;
 
 // Conectar a MongoDB
