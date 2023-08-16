@@ -12,5 +12,4 @@ automatic_scaling:
 service_account: expoactiva-nacional-395522@appspot.gserviceaccount.com
 env_variables:
   MONGO_URI: mongodb+srv://lazaroborghi:Lazaro$23@fstodo.xcdkqom.mongodb.net/?retryWrites=true&w=majority
-  PORT: 3000
   KEY: KTKNCYB3RSOFT51117587.-
